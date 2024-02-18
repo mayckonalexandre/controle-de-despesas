@@ -1,12 +1,13 @@
 import { ICreateRecord, IFinancialControl } from "../models/financial-control";
-import { IUser } from "../models/user";
+import { IUser, IUserCreate } from "../models/user";
+import { DeleteResult, UpdateResult } from "typeorm";
 
 export interface IUserControlRepository {
-  createUser: (user: IUser) => Promise<IUser | null>;
+  createUser: (user: IUserCreate) => Promise<IUser | null>;
   getUserById: (userId: number) => Promise<IUser | null>;
   getUserByEmail: (email: string) => Promise<IUser | null>;
-  deleteUserById: (userId: number) => Promise<void>;
-  updateUser: (userId: number, user: IUser) => Promise<void>;
+  //deleteUserById: (userId: number) => Promise<void>;
+  //updateUser: (userId: number, user: IUser) => Promise<void>;
   updateBalance: (userId: number, amount: number) => Promise<void>;
 }
 
@@ -17,6 +18,6 @@ export interface IFinancialControlRepository {
   updateRecord: (
     id: number,
     updatedRecord: IFinancialControl
-  ) => Promise<IFinancialControl>;
-  deleteRecord: (id: number) => Promise<IFinancialControl>;
+  ) => Promise<UpdateResult>;
+  deleteRecord: (id: number) => Promise<DeleteResult>;
 }

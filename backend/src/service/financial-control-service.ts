@@ -1,12 +1,17 @@
-import { IFinancialControlRepository } from "../repository/protocol";
+import {
+  IFinancialControlRepository,
+  IUserControlRepository,
+} from "../repository/protocol";
 import { ICreateRecord, IFinancialControl } from "../models/financial-control";
 import { TransactionType, userControlService } from "./user-control-service";
 import { financialRepository } from "../repository/financial-repository";
 import { ErrorCustom } from "../middleware/error";
+import { userControlRepository } from "../repository/user-repository";
 
 class FinancialControlService {
   constructor(
-    private readonly FinancialControlRepository: IFinancialControlRepository
+    private readonly FinancialControlRepository: IFinancialControlRepository,
+    private readonly UserControlRepository: IUserControlRepository
   ) {}
 
   /**
@@ -39,6 +44,10 @@ class FinancialControlService {
    */
 
   async createRecord(record: ICreateRecord) {
+    const user = await this.UserControlRepository.getUserById(record.userId);
+
+    if (!user) throw new ErrorCustom("Usuário não encontrado.", 400, false);
+
     const addedRecord = await this.FinancialControlRepository.createRecord(
       record
     );
@@ -49,7 +58,7 @@ class FinancialControlService {
       addedRecord.transactionType as TransactionType
     );
 
-    return { statusCode: 200, success: true, addedRecord };
+    return { statusCode: 201, success: true, addedRecord };
   }
 
   /**
@@ -107,5 +116,6 @@ class FinancialControlService {
 }
 
 export const financialControlService = new FinancialControlService(
-  financialRepository
+  financialRepository, 
+  userControlRepository
 );

@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 
 export const createFilePath = () => {
-  const logPath = path.join(__dirname, "./logs");
+  const logPath = path.join(__dirname, "./../logs");
 
   if (!fs.existsSync(logPath)) {
     fs.mkdirSync(logPath);

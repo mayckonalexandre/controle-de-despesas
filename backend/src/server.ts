@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express from "express";
 import "express-async-errors";
 import morganBody from "morgan-body";
@@ -7,6 +8,16 @@ import { limiter } from "./config/rate-limit";
 import helmet from "helmet";
 import { errorMiddleware } from "./middleware/error";
 import { createFilePath } from "./config/logs";
+import { myDataSource } from "./config/database/data-source";
+
+myDataSource
+  .initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err);
+  });
 
 const app = express();
 

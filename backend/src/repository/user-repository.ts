@@ -1,37 +1,37 @@
-import { IUser } from "../models/user";
-import { prisma } from "../config/db";
+import { IUserCreate } from "../models/user";
 import { IUserControlRepository } from "./protocol";
+import { myDataSource } from "../config/database/data-source";
+import { User } from "../entity/User";
 
 class UserControlRepository implements IUserControlRepository {
-  async createUser(user: IUser) {
-    const createdUser = await prisma.user.create({ data: user });
+  async createUser(user: IUserCreate) {
+    const createdUser = myDataSource.getRepository(User).create(user);
     return createdUser;
   }
 
   async getUserById(id: number) {
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await myDataSource.getRepository(User).findOneBy({ id });
     return user;
   }
-
+  
   async getUserByEmail(email: string) {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await myDataSource.getRepository(User).findOneBy({ email });
     return user;
   }
-
-  async deleteUserById(id: number) {
-    await prisma.user.delete({ where: { id } });
-    return;
-  }
-
-  async updateUser(id: number, user: IUser) {
-    await prisma.user.update({ where: { id }, data: user });
-    return;
-  }
-
+  //
+  //async deleteUserById(id: number) {
+  //  await prisma.user.delete({ where: { id } });
+  //  return;
+  //}
+  //
+  //async updateUser(id: number, user: IUser) {
+  //  await prisma.user.update({ where: { id }, data: user });
+  //  return;
+  //}
+  //
   async updateBalance(id: number, amount: number) {
-    await prisma.user.update({
-      where: { id },
-      data: { currentBalance: amount },
+    await myDataSource.getRepository(User).update(id, {
+      currentBalance: amount
     });
     return;
   }

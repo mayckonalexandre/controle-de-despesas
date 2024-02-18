@@ -1,20 +1,20 @@
-import { Decimal } from "@prisma/client/runtime/library";
-
 export interface IFinancialControl {
-    id: number;
-    userId: number;
-    description: string;
-    transactionType: string;
-    value: Decimal;
-    date: string;
-    category: string;
+  id: number;
+  userId: number;
+  description: string;
+  transactionType: string;
+  value: number;
+  date: string;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ICreateRecord {
-    userId: number;
-    description: string;
-    transactionType: string;
-    value: Decimal;
-    date: string;
-    category: string;
+  userId: number;
+  description: string;
+  transactionType: string;
+  value: number;
+  date: string;
+  category: string;
 }
